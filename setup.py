@@ -6,16 +6,17 @@ except ImportError:
     from distutils.core import setup, Extension
 
 import glob
-import importlib
+import importlib.util
 import io
 import sys
 
 
 def version():
-    loader = importlib.machinery.SourceFileLoader(
+    spec = importlib.util.spec_from_file_location(
         "libvalkey.version", "libvalkey/version.py"
     )
-    module = loader.load_module()
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
     return module.__version__
 
 
